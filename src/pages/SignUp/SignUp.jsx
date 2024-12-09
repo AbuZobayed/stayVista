@@ -5,6 +5,7 @@ import axios from "axios";
 // import axios from "axios";
 import toast from "react-hot-toast"
 import { TbFidgetSpinner } from "react-icons/tb";
+import { imageUpload } from "../../api/utils";
 
 
 
@@ -23,8 +24,8 @@ const SignUp = () => {
     const password = form.password.value;
     const image = form.image.files[0];
 
-    const formData = new FormData()
-    formData.append('image', image)
+    // const formData = new FormData()
+    // formData.append('image', image)
 
     console.log(name,email,password);
     
@@ -35,22 +36,29 @@ const SignUp = () => {
     try {
       setLoading(true)
       // part-1. Upload image and get image
-      const { data } = await axios.post(
+      const image_url = await imageUpload(image)
+console.log(image_url);
+
+      /**
+       * const { data } = await axios.post(
         `https://api.imgbb.com/1/upload?key=${
           import.meta.env.VITE_IMGBB_API_KEY
         }`,
         formData
         // {image}
-      );
 
+
+      );
       console.log(data.data.display_url);
+       */
+      
 
       // part-2 User Registaration 
       const result = await createUser (email,password)
       console.log(result);
       
       // part-3. Save userName and photo in firebase 
-      await updateUserProfile(name, data.data.display_url)
+      await updateUserProfile(name, image_url)
       navigate('/')
       toast.success('Signup Successful')
       
