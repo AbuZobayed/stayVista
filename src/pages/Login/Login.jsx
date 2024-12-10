@@ -7,18 +7,13 @@ import { useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
-  const location = useLocation()
-  const from =location?.state || '/'
+  const location = useLocation();
+  const from = location?.state || "/";
   // eslint-disable-next-line no-unused-vars
-  const {
-    signInWithGoogle,
-    signIn,
-    loading,
-    setLoading,
-    resetPassword
-  } = useAuth();
+  const { signInWithGoogle, signIn, loading, setLoading, resetPassword } =
+    useAuth();
 
-  const [email,setEmail] = useState('')
+  const [email, setEmail] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,47 +29,43 @@ const Login = () => {
     try {
       setLoading(true);
       // part-1. sign in user
-      await signIn(email,password)
+      await signIn(email, password);
       navigate(from);
       toast.success("Signup Successful");
     } catch (err) {
-      console.log(err); 
+      console.log(err);
       toast.error(err.message);
       setLoading(false);
     }
   };
 
   const handleResetPassword = async () => {
-    if(!email) return toast.error("Please write your email first")
-    try{
-      await resetPassword(email)
+    if (!email) return toast.error("Please write your email first");
+    try {
+      await resetPassword(email);
       toast.success("Request Success! Check your email for further process...");
       setLoading(false);
-    }
-    catch(err){
-      console.log(err); 
+    } catch (err) {
+      console.log(err);
       toast.error(err.message);
       setLoading(false);
     }
     console.log(email);
-    
-  }
-
+  };
 
   /**----------------------------
    * handle with google signIn *
    -------------------------------*/
 
-   const handleGoogleSignIn = async () =>{
+  const handleGoogleSignIn = async () => {
     try {
-      await signInWithGoogle()
-      navigate(from)
-      toast.success('Signup Successful')
-      
+      await signInWithGoogle();
+      navigate(from);
+      toast.success("Signup Successful");
     } catch (err) {
-      toast.error(err.message)
+      toast.error(err.message);
     }
-   }
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -97,7 +88,7 @@ const Login = () => {
               <input
                 type="email"
                 name="email"
-                onBlur={e => setEmail(e.target.value)}
+                onBlur={(e) => setEmail(e.target.value)}
                 id="email"
                 required
                 placeholder="Enter Your Email Here"
@@ -124,18 +115,25 @@ const Login = () => {
           </div>
 
           <div>
-          <button
-            disabled={loading}
+            <button
+              disabled={loading}
               type="submit"
               className="bg-rose-500 w-full rounded-md py-3 text-white"
             >
               {/* Continue */}
-              {loading? <TbFidgetSpinner className=" animate-spin m-auto" /> : 'Continue'}
+              {loading ? (
+                <TbFidgetSpinner className=" animate-spin m-auto" />
+              ) : (
+                "Sign In"
+              )}
             </button>
           </div>
         </form>
         <div className="space-y-1">
-          <button onClick={handleResetPassword} className="text-xs hover:underline hover:text-rose-500 text-gray-400">
+          <button
+            onClick={handleResetPassword}
+            className="text-xs hover:underline hover:text-rose-500 text-gray-400"
+          >
             Forgot password?
           </button>
         </div>
@@ -147,10 +145,11 @@ const Login = () => {
           <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
         </div>
         <button
-         disabled={loading} 
-         onClick={handleGoogleSignIn} 
-        //  disabled:cursor-not-allowed
-         className="  flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer">
+          disabled={loading}
+          onClick={handleGoogleSignIn}
+          //  disabled:cursor-not-allowed
+          className="  flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer"
+        >
           <FcGoogle size={32} />
 
           <p>Continue with Google</p>
