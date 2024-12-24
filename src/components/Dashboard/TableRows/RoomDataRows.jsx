@@ -7,9 +7,22 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { useState } from "react";
+import DeleteModal from "../../Modal/DeleteModal";
 
-const RoomDataRow = ({ room, refetch, handleDetete }) => {
-    let [isOpen, setIsOpen] = useState(false)
+const RoomDataRow = ({ room, handleDetete }) => {
+  /**----------------------
+   * For Delete Modal
+   * ---------------------- */
+  let [isOpen, setIsOpen] = useState(false);
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  /**----------------------
+   * For update Modal
+   * ---------------------- */
+
   return (
     <tr>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -45,7 +58,10 @@ const RoomDataRow = ({ room, refetch, handleDetete }) => {
         </p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <button onClick={() => setIsOpen(true)} className="relative cursor-pointer inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="relative cursor-pointer inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
+        >
           <span
             aria-hidden="true"
             className="absolute inset-0 bg-red-200 opacity-50 rounded-full"
@@ -53,7 +69,13 @@ const RoomDataRow = ({ room, refetch, handleDetete }) => {
           <span className="relative">Delete</span>
         </button>
         {/* Delete modal start */}
-        <>
+        <DeleteModal
+          isOpen={isOpen}
+          closeModal={closeModal}
+          handleDetete={handleDetete}
+          id={room?._id}
+        />
+        {/* <>
           
           <Dialog
             open={isOpen}
@@ -79,7 +101,7 @@ const RoomDataRow = ({ room, refetch, handleDetete }) => {
               </DialogPanel>
             </div>
           </Dialog>
-        </>
+        </> */}
         {/* Delete modal end */}
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
