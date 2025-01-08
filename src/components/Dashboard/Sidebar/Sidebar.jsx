@@ -14,10 +14,12 @@ import MenuItem from "./Menu/MenuItem";
 import HostMenu from "./Menu/HostMenu";
 import AdminMenu from "./Menu/AdminMenu";
 import GuestMenu from "./Menu/GuestMenu";
+import ToggleBtn from "../../Shared/Button/ToggleBtn";
 
 const Sidebar = () => {
   const { logOut } = useAuth();
   const [isActive, setActive] = useState(false);
+  const [toggle,setToggle] = useState(true)
   const [role, isLoading] = useRole();
   console.log(role, isLoading);
 
@@ -25,6 +27,10 @@ const Sidebar = () => {
   const handleToggle = () => {
     setActive(!isActive);
   };
+  const toggleHandler = (event) =>{
+    setToggle(event.target.checked)
+    // setToggle(!toggle)
+  }
   return (
     <>
       {/* Small Screen Navbar */}
@@ -75,7 +81,7 @@ const Sidebar = () => {
           {/* Nav Items */}
           <div className="flex flex-col justify-between flex-1 mt-6">
             {/* Conditional toggle button here.. */}
-
+            {role === "host" && <ToggleBtn  toggleHandler={toggleHandler} toggle={toggle}/>}
             {/*  Menu Items */}
             <nav>
               {/* Statistics */}
@@ -84,13 +90,11 @@ const Sidebar = () => {
                 address="/dashboard"
                 icon={BsGraphUp}
               />
-              
 
-             { role === 'guest' && <GuestMenu/>}
-             { role === 'host' && <HostMenu/>}
+              {role === "guest" && <GuestMenu />}
+              {role === "host" ? toggle? <HostMenu />: <GuestMenu/> :undefined}
               {/* <AdminMenu/> */}
-             { role === 'admin' && <AdminMenu/>}
-
+              {role === "admin" && <AdminMenu />}
 
 
             </nav>
@@ -102,10 +106,10 @@ const Sidebar = () => {
 
           {/* Profile Menu */}
           <MenuItem
-                label="Profile"
-                address="/dashboard/profile"
-                icon={FcSettings}
-              />
+            label="Profile"
+            address="/dashboard/profile"
+            icon={FcSettings}
+          />
           {/* <NavLink
             to="/dashboard/profile"
             className={({ isActive }) =>
