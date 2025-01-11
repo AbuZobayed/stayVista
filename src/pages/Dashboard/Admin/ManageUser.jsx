@@ -1,13 +1,13 @@
 import { Helmet } from "react-helmet-async";
-import useAuth from "../../../hooks/useAuth";
+// import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 import UserDataRow from "../../../components/Dashboard/TableRows/UserDataRow";
 
 const ManageUsers = () => {
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
   /**-----------------------
