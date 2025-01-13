@@ -1,9 +1,32 @@
 import {CardElement, useElements, useStripe} from '@stripe/react-stripe-js';
 import './CheckoutForm.css';
+import { useEffect, useState } from 'react';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import PropTypes from 'prop-types'
+
+
 
 const CheckoutForm = ({closeModal,bookingInfo}) => {
   const stripe = useStripe();
   const elements = useElements();
+  const axiosSecure = useAxiosSecure()
+  const [clientSecret, setClientSecret] = useState("");
+
+  useEffect(() =>{
+    //fetch client secret
+    if(bookingInfo?.price && bookingInfo?.price >1){
+        getClientSecret({price:bookingInfo?.price})
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[bookingInfo?.price])
+
+  // get clientSecret
+
+  const getClientSecret = async (price) =>{
+    const {data} = axiosSecure.post(`/create-payment-intent`, price)
+    console.log('gggggggg',data)
+    setClientSecret(data.clientSecret)
+  }
 
   const handleSubmit = async (event) => {
     // Block native form submission.
@@ -59,7 +82,7 @@ const CheckoutForm = ({closeModal,bookingInfo}) => {
       <div className="flex mt-2 justify-around">
                   <button
                   disabled={!stripe}
-                    type="button"
+                    type="submit"
                     className="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                   >
                     Pay ${bookingInfo?.price}
@@ -74,6 +97,12 @@ const CheckoutForm = ({closeModal,bookingInfo}) => {
                 </div>
     </form>
   );
+};
+
+CheckoutForm.propTypes = {
+  bookingInfo: PropTypes.object,
+  closeModal: PropTypes.func,
+ 
 };
 
 
