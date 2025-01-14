@@ -92,13 +92,24 @@ const CheckoutForm = ({ closeModal, bookingInfo }) => {
       // 1. Create payment info object
       const paymentInfo = {
         ...bookingInfo,
+        roomId: bookingInfo._id,
         transactionId: paymentIntent.id,
         date: new Date(),
       };
+      delete paymentInfo._id
       console.log(paymentInfo);
-
-      // 2. Save payment info in booking callection (db)
+      try {
+        // 2. Save payment info in booking callection (db)
+        const { data} = await axiosSecure.post('/booking',paymentInfo)
+        console.log(data);
+        
       // 3. Change room status to booked in db
+      } catch (err) {
+        console.log(err.message);
+        
+      }
+
+      
     }
     setProcessing(false);
   };
