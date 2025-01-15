@@ -5,11 +5,14 @@ import { useEffect, useState } from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import PropTypes from "prop-types";
 import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
-const CheckoutForm = ({ closeModal, bookingInfo }) => {
+const CheckoutForm = ({ closeModal, bookingInfo, refetch }) => {
   const stripe = useStripe();
   const elements = useElements();
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [clientSecret, setClientSecret] = useState();
   const [cardError, setCardError] = useState("");
@@ -96,20 +99,26 @@ const CheckoutForm = ({ closeModal, bookingInfo }) => {
         transactionId: paymentIntent.id,
         date: new Date(),
       };
-      delete paymentInfo._id
+      delete paymentInfo._id;
       console.log(paymentInfo);
       try {
         // 2. Save payment info in booking callection (db)
-        const { data} = await axiosSecure.post('/booking',paymentInfo)
+        const { data } = await axiosSecure.post("/booking", paymentInfo);
         console.log(data);
-        
-      // 3. Change room status to booked in db
+
+        // 3. Change room status to booked in db
+        await axiosSecure.patch(`/room/status/${bookingInfo?._id}`, {
+          status: true,
+        });
+
+        //update UI
+        refetch();
+        closeModal();
+        toast.success("Room Booked Successfully");
+        navigate("/dashboard/my-bookings");
       } catch (err) {
         console.log(err.message);
-        
       }
-
-      
     }
     setProcessing(false);
   };
@@ -163,6 +172,7 @@ const CheckoutForm = ({ closeModal, bookingInfo }) => {
 CheckoutForm.propTypes = {
   bookingInfo: PropTypes.object,
   closeModal: PropTypes.func,
+  refetch: PropTypes.func,
 };
 
 export default CheckoutForm;
