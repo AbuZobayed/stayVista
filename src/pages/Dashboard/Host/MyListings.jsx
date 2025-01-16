@@ -119,7 +119,7 @@ const MyListings = () => {
                     <RoomDataRow
                       key={room._id}
                       room={room}
-                      // refetch={refetch}
+                      refetch={refetch}
                       handleDetete={handleDetete}
                     />
                   ))}
