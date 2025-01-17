@@ -112,6 +112,8 @@ const AddRoom = () => {
     setImageText(image.name)
  }
 
+ 
+
   return (
    
      <>

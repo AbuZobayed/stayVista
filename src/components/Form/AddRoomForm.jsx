@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { TbFidgetSpinner } from "react-icons/tb";
 import { categories } from "../Categories/CategoriesData";
 import { DateRange } from "react-date-range";
@@ -6,11 +7,12 @@ const AddRoomForm = ({
   dates,
   handleDates,
   handleSubmit,
+  // eslint-disable-next-line no-unused-vars
   setImagePreview,
   imagePreview,
   imageText,
   handleImage,
-  loading
+  loading,
 }) => {
   return (
     <div className="w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50">
@@ -59,6 +61,7 @@ const AddRoomForm = ({
                 onChange={(item) => handleDates(item)}
                 moveRangeOnFirstSelection={false}
                 ranges={[dates]}
+                minDate={new Date()}
               />
             </div>
           </div>
@@ -90,6 +93,7 @@ const AddRoomForm = ({
                       accept="image/*"
                       hidden
                     />
+
                     <div className="bg-rose-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-rose-500">
                       {/* Upload Image */}
                       {/* {imageText} */}
@@ -100,8 +104,12 @@ const AddRoomForm = ({
                         : imageText}
                     </div>
                   </label>
+
+                  
                 </div>
               </div>
+
+            
 
               <div className="h-16 w-16 object-cover overflow-hidden flex items-center border border-gray-300 rounded ">
                 {imagePreview && <img src={imagePreview} />}
@@ -182,16 +190,15 @@ const AddRoomForm = ({
         </div>
 
         <button
-        disabled={loading}
+          disabled={loading}
           type="submit"
           className="w-full p-3 mt-5 text-center font-medium text-white transition duration-200 rounded shadow-md bg-rose-500"
         >
           {loading ? (
-                <TbFidgetSpinner className=" animate-spin m-auto" />
-              ) : (
-                "Save & Continue"
-              )}
-          
+            <TbFidgetSpinner className=" animate-spin m-auto" />
+          ) : (
+            "Save & Continue"
+          )}
         </button>
       </form>
     </div>
