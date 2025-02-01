@@ -40,7 +40,7 @@ const HostStatistics = () => {
                 Total Sales
               </p>
               <h4 className='block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900'>
-                ${statData?.totalPrice}
+                ৳{statData?.totalPrice}
               </h4>
             </div>
           </div>

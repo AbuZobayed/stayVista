@@ -14,7 +14,7 @@ import CheckoutForm from "../Form/CheckoutForm";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-const BookingModal = ({ closeModal, isOpen, bookingInfo,refetch }) => {
+const BookingModal = ({ closeModal, isOpen, bookingInfo, refetch }) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -63,23 +63,32 @@ const BookingModal = ({ closeModal, isOpen, bookingInfo,refetch }) => {
                     Guest: {bookingInfo.guest.name}
                   </p>
                 </div>
-                <div className="mt-2">
-                  <p className="text-sm text-gray-500">
-                    From: {format(new Date(bookingInfo.from), "PP")} - To:{" "}
-                    {format(new Date(bookingInfo.to), "PP")}
-                  </p>
-                </div>
+                {bookingInfo.duration === 'daily' ? (
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      From: {format(new Date(bookingInfo.from), "PP")} - To:{" "}
+                      {format(new Date(bookingInfo.to), "PP")}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      Duration: {bookingInfo.duration === 'sixMonthly' ? '6 Months' :
+                        bookingInfo.duration === 'yearly' ? '1 Year' : '1 Month'}
+                    </p>
+                  </div>
+                )}
 
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">
-                    Price: $ {bookingInfo.price}
+                    Price: ৳ {bookingInfo.price}
                   </p>
                 </div>
                 <hr className="mt-8 " />
 
                 <Elements stripe={stripePromise}>
                   {/* checkout form */}
-                  <CheckoutForm bookingInfo={bookingInfo}  closeModal={closeModal} refetch={refetch}/>
+                  <CheckoutForm bookingInfo={bookingInfo} closeModal={closeModal} refetch={refetch} />
                 </Elements>
                 {/* <div className="flex mt-2 justify-around">
                   <button

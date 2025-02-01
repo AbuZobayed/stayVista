@@ -6,6 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../components/Shared/LoadingSpinner";
 import { useParams } from "react-router-dom";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { useState } from "react";
+import VirtualTour from "../../components/RoomDetails/VirtualTour";
 
 // single room object (Fake Data)
 // const room = {
@@ -31,10 +33,11 @@ import useAxiosCommon from "../../hooks/useAxiosCommon";
 // }
 const RoomDetails = () => {
   const { id } = useParams();
-  const axiosCommon = useAxiosCommon()
+  const axiosCommon = useAxiosCommon();
+  const [isTourOpen, setIsTourOpen] = useState(false);
 
   //  useing Tanstack Query
-  const { data: room = {}, isLoading,refetch } = useQuery({
+  const { data: room = {}, isLoading, refetch } = useQuery({
     queryKey: ["room", id],
     queryFn: async () => {
       try {
@@ -62,12 +65,32 @@ const RoomDetails = () => {
           <div className="flex flex-col gap-6">
             <div>
               <Heading title={room.title} subtitle={room.location} />
-              <div className="w-full md:h-[60vh] overflow-hidden rounded-xl">
+              <div className="relative w-full md:h-[60vh] overflow-hidden rounded-xl">
                 <img
                   className="object-cover w-full"
                   src={room.image}
                   alt="header image"
                 />
+                {/* Virtual Tour Button */}
+                <button
+                  onClick={() => setIsTourOpen(true)}
+                  className="absolute bottom-4 right-4 bg-white text-gray-800 px-4 py-2 rounded-lg shadow-lg hover:bg-gray-100 transition flex items-center gap-2"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    />
+                  </svg>
+                  Virtual Tour
+                </button>
               </div>
             </div>
           </div>
@@ -124,11 +147,18 @@ const RoomDetails = () => {
 
             <div className="md:col-span-3 order-first md:order-last mb-10">
               {/* RoomReservation */}
-              <RoomReservation room={room} refetch={refetch}  />
+              <RoomReservation room={room} refetch={refetch} />
             </div>
           </div>
         </div>
       )}
+
+      {/* Virtual Tour Modal */}
+      <VirtualTour
+        isOpen={isTourOpen}
+        onClose={() => setIsTourOpen(false)}
+        tourImage={room?.tourImage}
+      />
     </Container>
   );
 };

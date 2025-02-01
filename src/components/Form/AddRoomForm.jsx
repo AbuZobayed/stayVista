@@ -2,17 +2,20 @@
 import { TbFidgetSpinner } from "react-icons/tb";
 import { categories } from "../Categories/CategoriesData";
 import { DateRange } from "react-date-range";
+import PropTypes from "prop-types";
 
 const AddRoomForm = ({
   dates,
   handleDates,
   handleSubmit,
-  // eslint-disable-next-line no-unused-vars
   setImagePreview,
   imagePreview,
   imageText,
   handleImage,
   loading,
+  handleTourImage,
+  tourImagePreview,
+  tourImageText,
 }) => {
   return (
     <div className="w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50">
@@ -80,41 +83,76 @@ const AddRoomForm = ({
               />
             </div>
 
-            <div className=" p-4 bg-white w-full  m-auto rounded-lg flex justify-between items-center">
-              <div className="file_upload px-5 py-3 relative border-4 border-dotted border-gray-300 rounded-lg">
-                <div className="flex flex-col w-max mx-auto text-center">
-                  <label>
-                    <input
-                      className="text-sm cursor-pointer w-36 hidden"
-                      type="file"
-                      onChange={(e) => handleImage(e.target.files[0])}
-                      name="image"
-                      id="image"
-                      accept="image/*"
-                      hidden
-                    />
-
-                    <div className="bg-rose-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-rose-500">
-                      {/* Upload Image */}
-                      {/* {imageText} */}
-                      {imageText.length > 20
-                        ? imageText.split(".")[0].slice(0, 15) +
-                          "..." +
-                          imageText.split(".")[1]
-                        : imageText}
-                    </div>
-                  </label>
-
-                  
+            <div className="space-y-1">
+              <label className="block text-gray-600">Room Image</label>
+              <div className="p-4 bg-white w-full rounded-lg">
+                <div className="file_upload px-5 py-3 relative border-4 border-dotted border-gray-300 rounded-lg">
+                  <div className="flex flex-col w-max mx-auto text-center">
+                    <label>
+                      <input
+                        className="text-sm cursor-pointer w-36 hidden"
+                        type="file"
+                        name="image"
+                        onChange={(e) => handleImage(e.target.files[0])}
+                        id="image"
+                        accept="image/*"
+                        hidden
+                      />
+                      <div className="bg-rose-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-rose-600">
+                        {imageText}
+                      </div>
+                    </label>
+                  </div>
                 </div>
-              </div>
-
-            
-
-              <div className="h-16 w-16 object-cover overflow-hidden flex items-center border border-gray-300 rounded ">
-                {imagePreview && <img src={imagePreview} />}
+                {imagePreview && (
+                  <div className="mt-2">
+                    <img
+                      src={imagePreview}
+                      alt="Room Preview"
+                      className="w-full h-32 object-cover rounded-lg"
+                    />
+                  </div>
+                )}
               </div>
             </div>
+
+            <div className="space-y-1">
+              <label className="block text-gray-600">
+                360° Virtual Tour Image (Optional)
+              </label>
+              <div className="p-4 bg-white w-full rounded-lg">
+                <div className="file_upload px-5 py-3 relative border-4 border-dotted border-gray-300 rounded-lg">
+                  <div className="flex flex-col w-max mx-auto text-center">
+                    <label>
+                      <input
+                        className="text-sm cursor-pointer w-36 hidden"
+                        type="file"
+                        name="tourImage"
+                        onChange={(e) => handleTourImage(e.target.files[0])}
+                        accept="image/*"
+                        hidden
+                      />
+                      <div className="bg-rose-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-rose-600">
+                        {tourImageText}
+                      </div>
+                    </label>
+                    <div className="text-gray-500 text-xs mt-2">
+                      Supports 360° panoramic images
+                    </div>
+                  </div>
+                </div>
+                {tourImagePreview && (
+                  <div className="mt-2">
+                    <img
+                      src={tourImagePreview}
+                      alt="360° Tour Preview"
+                      className="w-full h-32 object-cover rounded-lg"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div className="flex justify-between gap-2">
               <div className="space-y-1 text-sm">
                 <label htmlFor="price" className="block text-gray-600">
@@ -195,7 +233,7 @@ const AddRoomForm = ({
           className="w-full p-3 mt-5 text-center font-medium text-white transition duration-200 rounded shadow-md bg-rose-500"
         >
           {loading ? (
-            <TbFidgetSpinner className=" animate-spin m-auto" />
+            <TbFidgetSpinner className="animate-spin m-auto" />
           ) : (
             "Save & Continue"
           )}
@@ -203,6 +241,20 @@ const AddRoomForm = ({
       </form>
     </div>
   );
+};
+
+AddRoomForm.propTypes = {
+  dates: PropTypes.object,
+  handleDates: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  setImagePreview: PropTypes.func,
+  imagePreview: PropTypes.string,
+  imageText: PropTypes.string,
+  handleImage: PropTypes.func,
+  loading: PropTypes.bool,
+  handleTourImage: PropTypes.func,
+  tourImagePreview: PropTypes.string,
+  tourImageText: PropTypes.string,
 };
 
 export default AddRoomForm;
